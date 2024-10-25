@@ -1,0 +1,10 @@
+Fitness Tracker
+1. View Workout History
+2. Add Workout
+3. Filter Workouts by Type
+4. Remove Workout
+5. Exit
+Choose an option (1-5): 1
+Workout History:
+1. running - Duration: 45.0 mins, Calories: 350.0 kcal
+Total Calories Burned: 350.0 kcal
