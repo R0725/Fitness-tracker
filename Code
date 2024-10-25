@@ -1,0 +1,92 @@
+import json
+import os
+
+# File to store workout data
+WORKOUTS_FILE = 'workouts.json'
+
+# Load workouts from the file
+def load_workouts():
+    if os.path.exists(WORKOUTS_FILE):
+        with open(WORKOUTS_FILE, 'r') as file:
+            return json.load(file)
+    return []
+
+# Save workouts to the file
+def save_workouts(workouts):
+    with open(WORKOUTS_FILE, 'w') as file:
+        json.dump(workouts, file)
+
+# Display workout history
+def display_workouts(workouts):
+    if not workouts:
+        print("No workouts recorded.")
+        return
+    print("\nWorkout History:")
+    for index, workout in enumerate(workouts):
+        print(f"{index + 1}. {workout['type']} - Duration: {workout['duration']} mins, Calories: {workout['calories']} kcal")
+    total_calories = sum(workout['calories'] for workout in workouts)
+    print(f"Total Calories Burned: {total_calories} kcal")
+
+# Add a new workout
+def add_workout(workouts):
+    workout_type = input("Enter workout type (e.g., Running, Cycling): ")
+    
+    while True:
+        try:
+            duration = float(input("Enter duration in minutes (e.g., 40): "))
+            break  # Exit the loop if input is valid
+        except ValueError:
+            print("Invalid input. Please enter a numeric value for duration.")
+    
+    while True:
+        try:
+            calories = float(input("Enter calories burned (e.g., 300): "))
+            break  # Exit the loop if input is valid
+        except ValueError:
+            print("Invalid input. Please enter a numeric value for calories.")
+    
+    workouts.append({"type": workout_type, "duration": duration, "calories": calories})
+    save_workouts(workouts)
+    print(f"Workout '{workout_type}' added.")
+
+# Filter workouts by type
+def filter_workouts(workouts):
+    workout_type = input("Enter workout type to filter (e.g., Running, Cycling): ")
+    filtered_workouts = [workout for workout in workouts if workout['type'].lower() == workout_type.lower()]
+    
+    if not filtered_workouts:
+        print(f"No workouts found for type '{workout_type}'.")
+        return
+    
+    print(f"\nFiltered Workouts for '{workout_type}':")
+    for index, workout in enumerate(filtered_workouts):
+        print(f"{index + 1}. Duration: {workout['duration']} mins, Calories: {workout['calories']} kcal")
+    total_calories = sum(workout['calories'] for workout in filtered_workouts)
+    print(f"Total Calories Burned for '{workout_type}': {total_calories} kcal")
+
+# Main function
+def main():
+    workouts = load_workouts()
+    while True:
+        print("\nFitness Tracker")
+        print("1. View Workout History")
+        print("2. Add Workout")
+        print("3. Filter Workouts by Type")
+        print("4. Exit")
+        
+        choice = input("Choose an option (1-4): ")
+        
+        if choice == '1':
+            display_workouts(workouts)
+        elif choice == '2':
+            add_workout(workouts)
+        elif choice == '3':
+            filter_workouts(workouts)
+        elif choice == '4':
+            print("Exiting the program.")
+            break
+        else:
+            print("Invalid choice. Please select a valid option.")
+
+if __name__ == "__main__":
+    main()
